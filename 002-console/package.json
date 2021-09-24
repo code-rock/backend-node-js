@@ -9,8 +9,6 @@
   },
   "bin": {
     "current": "./scripts/current.js",
-    "sub": "./scripts/sub.js",
-    "add": "./scripts/add.js",
     "guessNumber": "./scripts/guessNumber"
   }
 }
