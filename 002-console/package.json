@@ -1,0 +1,14 @@
+{
+  "name": "dz2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "code-rock",
+  "license": "MIT",
+  "dependencies": {
+    "yargs": "^17.1.1"
+  },
+  "bin": {
+    "current": "./scripts/current.js",
+    "guessNumber": "./scripts/guessNumber"
+  }
+}
