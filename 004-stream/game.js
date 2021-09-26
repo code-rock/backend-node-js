@@ -24,14 +24,15 @@ const input = readline.createInterface(process.stdin);
 
 input.on('line', (str) => {
     let content = 0;
-    
+
      if (number === str) {
         console.log('Угадал! Давай еще?');
         content = 1;
     } else {
         console.log('Не угадал.. Попробуешь еще?)');
-        number = String(Math.round(Math.random()) + 1);
     }
+    
+    number = String(Math.round(Math.random()) + 1);
 
     fs.appendFile(
         file,
