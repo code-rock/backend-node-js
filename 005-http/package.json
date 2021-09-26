@@ -14,7 +14,6 @@
     "dotenv": "^10.0.0"
   },
   "dependencies": {
-    "config": "^3.3.6",
     "yargs": "^17.2.1"
   }
 }
