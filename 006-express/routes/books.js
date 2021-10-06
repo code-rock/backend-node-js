@@ -56,7 +56,6 @@ router.post('/upload', upload.single('file'), (req, res) => {
 });
 
 router.use(formData.parse()).post('/', (req, res) => {
-    console.log(req, 'req')
     const { books } = store
     const { title, description, authors, favorite, fileCover, fileName, fileBook } = req.body
 
