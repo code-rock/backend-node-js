@@ -5,7 +5,6 @@ const storage = multer.diskStorage({
     cb(null, 'public/books')
   },
   filename(req, file, cb) {
-    console.log(file, 'file')
     if (req.query.id) {
       const fileNameDivided = file.originalname.split('.')
       const extension = fileNameDivided[fileNameDivided.length - 1]

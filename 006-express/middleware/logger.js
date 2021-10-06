@@ -11,7 +11,6 @@ module.exports = (req, res, next) => {
     const userAgent = req.get("user-agent");
 
     let data = `${hour}:${minutes}:${seconds} ${method}: ${url} user-agent: ${userAgent}`;
-    console.log(data);
 
     fs.appendFile("server.log", data + os.EOL, (err) => {
         if (err) throw err;
