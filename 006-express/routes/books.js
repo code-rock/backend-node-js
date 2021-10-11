@@ -3,8 +3,6 @@ const router = express.Router();
 const upload = require('../middleware/file');
 const { Book } = require('../models')
 
-const formData = require("express-form-data")
-
 const store = {
     books: [],
 }
@@ -55,7 +53,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
     }
 });
 
-router.use(formData.parse()).post('/', (req, res) => {
+router.post('/', upload.none(), (req, res) => {
     const { books } = store
     const { title, description, authors, favorite, fileCover, fileName, fileBook } = req.body
 
@@ -66,7 +64,7 @@ router.use(formData.parse()).post('/', (req, res) => {
     res.json(newBook)
 })
 
-router.use(formData.parse()).put('/:id', (req, res) => {
+router.put('/:id', upload.none(), (req, res) => {
     const { books } = store;
     const { title, description, authors, favorite, fileCover, fileName, fileBook } = req.body;
     const { id } = req.params;
