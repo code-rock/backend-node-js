@@ -1,21 +1,47 @@
 const multer = require('multer');
 
+const extensionCovers = {
+  'image/png': 'png',
+};
+
+const extensionBooks = {
+  'text/plain': 'text',
+  'application/pdf': 'pdf', 
+  'application/octet-stream': 'fb2', 
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+};
+
+const extension = {
+  ...extensionCovers,
+  ...extensionBooks
+};
+
+const allowedTypes = Object.keys(extension);
+
+const chosePlace = (mimetype) => {
+  let path = 'public/';
+
+  if (extensionCovers[mimetype]) {
+    path += 'covers';
+  } else if (extensionBooks[mimetype]) {
+    path += 'books';
+  }
+
+  return path;
+}
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'public/books')
+    cb(null, chosePlace(file.mimetype))
   },
   filename(req, file, cb) {
-    if (req.query.id) {
-      const fileNameDivided = file.originalname.split('.')
-      const extension = fileNameDivided[fileNameDivided.length - 1]
-      cb(null, `book-${req.query.id}.${extension}`)
+    if (req.body.fileName && extension[file.mimetype]) {
+        cb(null, `${req.body.fileName}.${extension[file.mimetype]}`);
     } else {
-      cb(null, `book-${new Date().toISOString().replace(/:/g, '-')}.${extension}`)
+      cb(null, file.originalname);
     }
   }
 });
-
-const allowedTypes = ['text/plain', 'application/pdf', 'application/octet-stream', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
 const fileFilter = (req, file, cb) => {
   if (allowedTypes.includes(file.mimetype)) {
