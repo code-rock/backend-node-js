@@ -8,13 +8,13 @@ docker.io/library/node:15.14
 
 Запустите контейнер с именем first_node из образа node версии 15.14 в фоновом режиме, 
 подключив папку data из текущей директории в /var/first/data контейнера
-docker run -d -v D:\Users\Tatiana\web\ndse-homeworks\009-docker-start\data:/var/first/data --name first_node node:15.14
+docker run -d -v -t D:\Users\Tatiana\web\ndse-homeworks\009-docker-start\data:/var/first/data --name first_node node:15.14
 
 baf4bc11e3087961af2b5f0a5b2a618d0ae98a08db02cf67fa6d11546b6ae80d
 
 Запустите контейнер с именем second_node из образа node версии 15.14 в фоновом режиме, 
 подключив папку data из текущей директории в /var/second/data контейнера
-docker run -d -v D:\Users\Tatiana\web\ndse-homeworks\009-docker-start\data:/var/second/data --name second_node node:15.14
+docker run -d -v -t D:\Users\Tatiana\web\ndse-homeworks\009-docker-start\data:/var/second/data --name second_node node:15.14
 
 ebedbaac362709b1b0f8928a62435aefff7ecae936c2113012750ef1da2749dc
 
