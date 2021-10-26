@@ -1,0 +1,104 @@
+Загрузите образ busybox последней версии
+docker pull busybox
+
+Using default tag: latest
+latest: Pulling from library/busybox
+24fb2886d6f6: Pull complete
+Digest: sha256:f7ca5a32c10d51aeda3b4d01c61c6061f497893d7f6628b92f822f7117182a57
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+
+Запустите новый контейнер busybox с командой ping сайта netology.ru, и количеством пингов 7, поименуйте контейнер pinger
+docker run --name pinger -i -t busybox ping -c 7 netology.ru
+
+PING netology.ru (104.22.49.171): 56 data bytes
+64 bytes from 104.22.49.171: seq=0 ttl=37 time=15.623 ms
+64 bytes from 104.22.49.171: seq=1 ttl=37 time=8.533 ms
+64 bytes from 104.22.49.171: seq=2 ttl=37 time=12.335 ms
+64 bytes from 104.22.49.171: seq=3 ttl=37 time=10.270 ms
+64 bytes from 104.22.49.171: seq=4 ttl=37 time=8.878 ms
+64 bytes from 104.22.49.171: seq=5 ttl=37 time=8.818 ms
+64 bytes from 104.22.49.171: seq=6 ttl=37 time=8.741 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 8.533/10.456/15.623 ms
+
+Выведите на список всех контейнеров - запущенных и остановленных
+docker ps -a
+
+CONTAINER ID   IMAGE                                      COMMAND                  CREATED          STATUS                      PORTS     NAMES
+6bcb363f0f1c   busybox                                    "ping -c 7 netology.…"   42 seconds ago   Exited (0) 33 seconds ago             pinger
+d7648eb3a220   docker/dev-environments-default:stable-1   "sleep infinity"         23 hours ago     Up 23 hours                           romantic_boyd
+
+Выведите на экран логи контейнера с именем pinger
+docker logs -t pinger
+
+2021-10-24T07:42:48.421646200Z PING netology.ru (104.22.49.171): 56 data bytes
+2021-10-24T07:42:48.437000800Z 64 bytes from 104.22.49.171: seq=0 ttl=37 time=15.623 ms
+2021-10-24T07:42:49.430168900Z 64 bytes from 104.22.49.171: seq=1 ttl=37 time=8.533 ms
+2021-10-24T07:42:50.434628000Z 64 bytes from 104.22.49.171: seq=2 ttl=37 time=12.335 ms
+2021-10-24T07:42:51.433240100Z 64 bytes from 104.22.49.171: seq=3 ttl=37 time=10.270 ms
+2021-10-24T07:42:52.432907500Z 64 bytes from 104.22.49.171: seq=4 ttl=37 time=8.878 ms
+2021-10-24T07:42:53.433540400Z 64 bytes from 104.22.49.171: seq=5 ttl=37 time=8.818 ms
+2021-10-24T07:42:54.433930100Z 64 bytes from 104.22.49.171: seq=6 ttl=37 time=8.741 ms
+2021-10-24T07:42:54.434030700Z
+2021-10-24T07:42:54.434315200Z --- netology.ru ping statistics ---
+2021-10-24T07:42:54.434370600Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-10-24T07:42:54.434464000Z round-trip min/avg/max = 8.533/10.456/15.623 ms
+
+Запустите второй раз контейнера с именем pinger
+docker start pinger
+
+pinger
+
+Выведите на список всех контейнеров - запущенных и остановленных
+docker ps -a
+
+CONTAINER ID   IMAGE                                      COMMAND                  CREATED         STATUS                      PORTS     NAMES
+6bcb363f0f1c   busybox                                    "ping -c 7 netology.…"   3 minutes ago   Exited (0) 22 seconds ago             pinger
+d7648eb3a220   docker/dev-environments-default:stable-1   "sleep infinity"         23 hours ago    Up 23 hours                           romantic_boyd
+
+Выведите на экран логи контейнера с именем pinger
+docker logs -f -t pinger
+
+2021-10-24T07:42:48.421646200Z PING netology.ru (104.22.49.171): 56 data bytes
+2021-10-24T07:42:48.437000800Z 64 bytes from 104.22.49.171: seq=0 ttl=37 time=15.623 ms
+2021-10-24T07:42:49.430168900Z 64 bytes from 104.22.49.171: seq=1 ttl=37 time=8.533 ms
+2021-10-24T07:42:50.434628000Z 64 bytes from 104.22.49.171: seq=2 ttl=37 time=12.335 ms
+2021-10-24T07:42:51.433240100Z 64 bytes from 104.22.49.171: seq=3 ttl=37 time=10.270 ms
+2021-10-24T07:42:52.432907500Z 64 bytes from 104.22.49.171: seq=4 ttl=37 time=8.878 ms
+2021-10-24T07:42:53.433540400Z 64 bytes from 104.22.49.171: seq=5 ttl=37 time=8.818 ms
+2021-10-24T07:42:54.433930100Z 64 bytes from 104.22.49.171: seq=6 ttl=37 time=8.741 ms
+2021-10-24T07:42:54.434030700Z
+2021-10-24T07:42:54.434315200Z --- netology.ru ping statistics ---
+2021-10-24T07:42:54.434370600Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-10-24T07:42:54.434464000Z round-trip min/avg/max = 8.533/10.456/15.623 ms
+2021-10-24T07:45:29.985067600Z PING netology.ru (104.22.49.171): 56 data bytes
+2021-10-24T07:45:29.996772300Z 64 bytes from 104.22.49.171: seq=0 ttl=37 time=10.427 ms
+2021-10-24T07:45:30.995134700Z 64 bytes from 104.22.49.171: seq=1 ttl=37 time=8.580 ms
+2021-10-24T07:45:31.996094200Z 64 bytes from 104.22.49.171: seq=2 ttl=37 time=8.891 ms
+2021-10-24T07:45:32.999937200Z 64 bytes from 104.22.49.171: seq=3 ttl=37 time=12.320 ms
+2021-10-24T07:45:33.997396800Z 64 bytes from 104.22.49.171: seq=4 ttl=37 time=9.136 ms
+2021-10-24T07:45:34.999563100Z 64 bytes from 104.22.49.171: seq=5 ttl=37 time=10.977 ms
+2021-10-24T07:45:35.997734100Z 64 bytes from 104.22.49.171: seq=6 ttl=37 time=8.442 ms
+2021-10-24T07:45:35.997945000Z
+2021-10-24T07:45:35.997988000Z --- netology.ru ping statistics ---
+2021-10-24T07:45:35.998022300Z 7 packets transmitted, 7 packets received, 0% packet loss
+2021-10-24T07:45:35.998164800Z round-trip min/avg/max = 8.442/9.824/12.320 ms
+
+Определите по логам общее количество запусков команды ping и какое общее количество отправленых запросов
+14 packets transmitted, 14 packets received
+
+Удалите контейнер с именем pinger
+docker rm -f pinger
+
+pinger
+
+Удалите образ busybox
+docker rmi busybox
+
+Untagged: busybox:latest
+Untagged: busybox@sha256:f7ca5a32c10d51aeda3b4d01c61c6061f497893d7f6628b92f822f7117182a57
+Deleted: sha256:16ea53ea7c652456803632d67517b78a4f9075a10bfdc4fc6b7b4cbf2bc98497
+Deleted: sha256:cfd97936a58000adc09a9f87adeeb7628a2c71d11c4998e6e7f26935fa0cd713
