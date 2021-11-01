@@ -1,0 +1,38 @@
+Загрузите образ node версии 15.14
+docker pull node:15.14
+
+15.14: Pulling from library/node
+Digest: sha256:608bba799613b1ebf754034ae008849ba51e88b23271412427b76d60ae0d0627
+Status: Image is up to date for node:15.14
+docker.io/library/node:15.14
+
+Запустите контейнер с именем first_node из образа node версии 15.14 в фоновом режиме, 
+подключив папку data из текущей директории в /var/first/data контейнера
+docker run -d -t -v D:\Users\Tatiana\web\ndse-homeworks\009-docker-start\data:/var/first/data --name first_node node:15.14
+
+41333811209ebe984cc75b1c7d2bad8a17070feeb4146f2980883e9875beaa08
+
+Запустите контейнер с именем second_node из образа node версии 15.14 в фоновом режиме, 
+подключив папку data из текущей директории в /var/second/data контейнера
+docker run -d -t -v D:\Users\Tatiana\web\ndse-homeworks\009-docker-start\data:/var/second/data --name second_node node:15.14
+
+bab65640ac97ded53b993654f7fd3a6921f5ad8172a55211c53c2118c79a8496
+
+Подключитесь к контейнеру first_node с помощью exec и создайте текстовый файл любого 
+содержания в /var/first/data
+docker exec -it first_node touch file.txt
+
+Добавьте еще один файл в папку data на хостовой машине
+docker exec -it first_node touch file2.txt
+
+Подключитесь к контейнеру second_node с помощью exec и получите список файлов в директории /var/second/data, выведете на экран содержимое файлов
+docker exec -i -t second_node ls -alF /var/second/data
+
+Остановите оба контейнера
+docker stop $(docker ps -a -q)
+
+Удалите оба контейнера
+docker rm $(docker ps -a -q)
+
+Удалите образ node версии 15.14
+docker rmi node:15.14
