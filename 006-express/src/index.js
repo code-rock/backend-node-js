@@ -14,6 +14,7 @@ const app = express()
 app.use(loggerMiddleware);
 // app.use(express.json());
 // app.use(express.urlencoded());
+app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.use('/public', express.static(__dirname + "/public"));
