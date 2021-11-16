@@ -1,0 +1,20 @@
+services:
+  redis:
+    image: redis
+  library: 
+    image: ikrendelek/library:latest
+    environment:
+      - PORT=3000
+    ports:
+      - 8100:3000  
+    command: sh -c "npm install && npm run dev"
+    working_dir: /app
+    volumes:
+      - ./:/app   
+  counter:
+    build: .
+    environment:
+      - REDIS_URL=redis
+    links:
+      - redis  
+      - library

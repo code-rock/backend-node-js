@@ -46,3 +46,10 @@
 
 ### Критерии выполнения
 Приложение опубликовано на heroku путём публикации контейнера, используя heroku cli. 
+
+docker-compose up --build
+docker build -t ikrendelek/counter:latest .
+docker run -v ${pwd}:/app -w /app -it --rm -p 81:3000 ikrendelek/counter:latest /bin/bash 
+
+curl -X POST  localhost:8100/counter/12/incr
+curl localhost:8100/counter/12
