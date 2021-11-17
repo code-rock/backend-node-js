@@ -6,15 +6,17 @@ services:
     environment:
       - PORT=3000
     ports:
-      - 8100:3000  
-    command: sh -c "npm install && npm run dev"
+      - 3000:3000  
     working_dir: /app
     volumes:
-      - ./:/app   
+      - ./:/app  
   counter:
     build: .
     environment:
       - REDIS_URL=redis
+      - PORT=3002
+    ports:
+      - 3002:3002
     links:
       - redis  
       - library
