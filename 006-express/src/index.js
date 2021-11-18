@@ -14,6 +14,7 @@ const app = express()
 app.use(loggerMiddleware);
 // app.use(express.json());
 // app.use(express.urlencoded());
+app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.use('/public', express.static(__dirname + "/public"));
@@ -25,6 +26,6 @@ app.use('/api/books', booksRouter);
 app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+app.listen(PORT, '0.0.0.0');
+
+console.log(`Сервер слушает порт: ${PORT}`);

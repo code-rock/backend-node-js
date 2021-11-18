@@ -39,4 +39,11 @@
 `DELETE` | `/api/books/:id` | удалить книгу по **id** | удаляем книгу и возвращаем ответ: **'ok'**
 
 
-
+ docker run -it -v ${pwd}:/app -w /app -p 81:3000 -e PORT=3000 node /bin/bash
+ docker build -t library:latest .
+ docker run -it --rm library:latest /bin/bash
+ ls
+ docker push ikrendelek/library:latest
+ docker images
+ docker tag library:latest ikrendelek/library:latest
+ docker run -it -rm -p 81:3000 -e PORT=3000 ikrendelek/library:latest

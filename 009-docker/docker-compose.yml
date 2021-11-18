@@ -1,0 +1,22 @@
+services:
+  redis:
+    image: redis
+  library: 
+    image: ikrendelek/library:latest
+    environment:
+      - PORT=3000
+    ports:
+      - 3000:3000  
+    working_dir: /app
+    volumes:
+      - ./:/app  
+  counter:
+    build: .
+    environment:
+      - REDIS_URL=redis
+      - PORT=3002
+    ports:
+      - 3002:3002
+    links:
+      - redis  
+      - library
