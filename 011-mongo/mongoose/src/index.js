@@ -1,24 +1,76 @@
-const express = require("express")
-// const cors = require("cors")
+const express = require("express");
+const cors = require("cors")
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const loggerMiddleware = require('./middleware/logger');
 const errorMiddleware = require('./middleware/error');
 
+const loginRouter = require('./routes/login');
 const booksView = require('./routes/books');
 const booksRouter = require('./routes/api/books');
 const usersRouter = require('./routes/api/users');
 
+const User = require('./models/User');
+
+/**
+ * @param {String} username
+ * @param {String} password
+ * @param {Function} done
+*/
+function verify (username, password, cb) {
+    User.findOne({ username: username }, (err, user) => {
+      if (err) { 
+          return cb(err) 
+      } else if (!user || user.password !== password) { 
+          return cb(null, false) 
+      } else {
+          return cb(null, user)
+        }
+    })
+}
+  
+  const options = {
+    usernameField: 'username',
+    passwordField: 'password',
+    passReqToCallback: false,
+  }
+  
+  //  Добавление стратегии для использования
+  passport.use(new LocalStrategy(options, verify))
+  
+  // Конфигурирование Passport для сохранения пользователя в сессии
+  passport.serializeUser((user, cb) => {
+    console.log(user, 'user serializeUser')
+    cb(null, user._id)
+  })
+  
+  passport.deserializeUser(async (id, cb) => {
+    try {
+        const user = await User.findById(id);
+        cb(null, user)
+    } catch (err) {
+      cb(err)
+    }
+  })
+  
 const app = express()
 
-// app.use(cors())
 app.set('views', __dirname + '/views');
 app.use(loggerMiddleware);
-// app.use(express.json());
-// app.use(express.urlencoded());
 app.set('view engine', 'ejs');
 
 app.use('public', express.static(__dirname + "/public"));
+app.use(require('express-session')({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  }))
 
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use('/', loginRouter);
 app.use('/', booksView);
 app.use('/api/user', usersRouter);
 app.use('/api/books', booksRouter);

@@ -3,8 +3,9 @@ const router = express.Router();
 const upload = require('../../middleware/file');
 const Book = require('../../models')
 
-router.get('/', (req, res) => {
-    res.json(store.books);
+router.get('/', async (req, res) => {
+    const books = await Book.find();
+    res.json(books);
 })
 
 router.get('/:id/download', async (req, res) => {
