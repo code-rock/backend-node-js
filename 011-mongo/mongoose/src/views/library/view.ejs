@@ -34,4 +34,69 @@
     </div>
 </div>
 
+<div class="container"></div>
+    <div class="row">
+        <div class="col-4">
+            <div id="list" class="list-group">
+                <% book.reviews.forEach((review) => { %>
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <small><%= review.username %></small>
+                        </div>
+                        <p class="mb-1"><%= review.text %></p>
+                    </div>
+                <%  }); %>
+            </div>
+        </div>
+    </div>
+
+    <% if (user) { %>
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="text">Текст отзыва</label>
+                    <textarea placeholder="message" class="form-control" id="text" data-book-id=<%= book.id %> data-user=<%= user.username %>></textarea>
+                </div>
+                <button id="send-room" class="btn btn-primary">Добавить отзыв</button>
+            </div>
+        </div>
+        <script>
+            const inputText = document.querySelector('#text');
+            const username = inputText.dataset.user;
+            const bookID = inputText.dataset.bookId;
+            const socket = io.connect('/', { query: `roomName=${bookID}` });
+            const boxList = document.querySelector('#list');
+            const sendRoom = document.querySelector('#send-room');
+            const getTmp = (msg) => {
+                return `
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small>${msg.username}</small>
+                            </div>
+                            <p class="mb-1">${msg.text}</p>
+                        </div>
+                `;
+            }
+
+            socket.on('message-to-room', (msg) => {
+                const div = getTmp(msg);
+                boxList.insertAdjacentHTML('beforeend', div);
+            });
+
+            sendRoom.addEventListener('click', () => {
+                console.log('click')
+                socket.emit('message-to-room', {
+                    username: username,
+                    text: inputText.value,
+                });
+            });
+
+        </script>
+    <% } else { %>
+        <a href="/login" role="button" class="btn btn-outline-primary">
+            Войти, чтобы оставить отзыв
+        </a>
+    <% } %>
+</div>
+
 <%- include("../partials/layout-end") %>
