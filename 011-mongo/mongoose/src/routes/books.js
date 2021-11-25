@@ -7,14 +7,16 @@ router.get('/', async (req, res) => {
     const books = await Book.find();
     res.render("library/index", {
         title: "Библиотека",
-        books: books
+        books: books,
+        user: req.user
     });
 });
 
 router.get('/create', (req, res) => {
     res.render("library/create", {
         title: "Создать новую книгу",
-        book: {}
+        book: {},
+        user: req.user
     });
 });
 
@@ -42,19 +44,19 @@ router.post('/create', upload.fields([
 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    let book;
+    let book = {};
     try {
         book = await Book.findById(id);
+        res.render("library/view", {
+            title: "Просмотр",
+            book: book,
+            notSet: 'Неизвестно',
+            user: req.user
+        });
     } catch (e) {
         console.error(e);
         res.status(404).redirect('/404');
     }
-
-    res.render("library/view", {
-        title: "Просмотр",
-        book: book,
-        notSet: 'Неизвестно'
-    });
 });
 
 router.post('/delete/:id', async (req, res) => {
@@ -81,6 +83,7 @@ router.get('/update/:id', async (req, res) => {
     res.render("library/create", {
         title: "Создать новую книгу",
         book,
+        user: req.user,
     });
 })
 

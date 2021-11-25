@@ -19,4 +19,14 @@
             </li>
         </ul>
     </div>
+    <% if (!user) { %>
+        <div>
+            <a href="/login" role="button" class="btn btn-outline-primary">Войти</a>
+            <a href="/registration" role="button" class="btn btn-outline-warning">Регистрация</a>
+        </div>
+    <% } else { %>
+        <a href="/profile" alt="Переход в личный кабинет" class="btn btn-sm btn-primary">
+            <i class="fa fa-user-circle" aria-hidden="true"></i>
+        </a>
+    <% } %>
 </nav>

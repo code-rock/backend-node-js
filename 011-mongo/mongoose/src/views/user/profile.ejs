@@ -1,0 +1,16 @@
+<%- include("../partials/layout-start", { title: title }) %>
+    <%- include("../partials/menu") %>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12">
+            <p>
+                ID: <%= user.id %><br />
+                Логин: <%= user.username %><br />
+                Имя: <%= user.displayName %><br />
+                Email: <%= user.email %><br />
+            </p>
+            <div class="form-group text-right ">
+                <a href="/logout" type="button" class="btn btn-primary">Разлогиниться</a>
+            </div>
+        </div>
+    </div>
+<%- include("../partials/layout-end") %>
