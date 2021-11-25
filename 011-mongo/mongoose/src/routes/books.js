@@ -46,7 +46,6 @@ router.post('/create', upload.fields([
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     let book = {};
-    console.log(req.user, res.user, '.user')
     try {
         book = await Book.findById(id);
         res.render("library/view", {

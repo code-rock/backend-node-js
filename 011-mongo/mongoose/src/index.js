@@ -103,7 +103,6 @@ io.on('connection', (socket) => {
         { $push: { 'reviews': msg } },
         { upsert: true },
         (err, data) => {
-          console.log('sss')
           if (err) console.log(err);
         }
       );
