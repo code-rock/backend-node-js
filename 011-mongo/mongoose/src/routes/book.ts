@@ -12,11 +12,11 @@ interface BookTypes {
 }
 
 interface BookRepositoryTypes {
-    createBook: (book: BookTypes) => BookTypes;
-    getBook: (id: string) => BookTypes;
-    getBooks: () => Array<BookTypes>;
-    updateBook: (id: string) => BookTypes;
-    deleteBook: (id: string) => Boolean;
+    createBook: (book: BookTypes) => Promise<BookTypes>;
+    getBook: (id: string) => Promise<BookTypes>;
+    getBooks: () => Promise<Array<BookTypes>>;
+    updateBook: (id: string) => Promise<BookTypes>;
+    deleteBook: (id: string) => Promise<Boolean>;
 }
 
 class BookRepository implements BookRepository {
