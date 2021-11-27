@@ -13,53 +13,27 @@ class BookRepository {
     createBook(book) {
         return __awaiter(this, void 0, void 0, function* () {
             const newBook = new Book(book);
-            try {
-                const savedBook = yield newBook.save();
-                return savedBook;
-            }
-            catch (err) {
-                return err;
-            }
+            return yield newBook.save();
         });
     }
     getBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield Book.findById(id);
-            }
-            catch (err) {
-                return err;
-            }
+            return yield Book.findById(id);
         });
     }
     getBooks() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield Book.find();
-            }
-            catch (err) {
-                return err;
-            }
+            return yield Book.find();
         });
     }
     updateBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield Book.findById(id);
-            }
-            catch (err) {
-                return err;
-            }
+            return yield Book.findById(id);
         });
     }
     deleteBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                return yield Book.deleteOne({ _id: id });
-            }
-            catch (err) {
-                return err;
-            }
+            return yield Book.deleteOne({ _id: id });
         });
     }
 }
