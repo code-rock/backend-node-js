@@ -12,51 +12,29 @@ interface BookTypes {
 }
 
 interface BookRepositoryTypes {
-    createBook: (book: BookTypes) => BookTypes | Error;
-    getBook: (id: string) => BookTypes | Error;
-    getBooks: () => Array<BookTypes> | Error;
-    updateBook: (id: string) => BookTypes | Error;
-    deleteBook: (id: string) => Boolean | Error;
+    createBook: (book: BookTypes) => BookTypes;
+    getBook: (id: string) => BookTypes;
+    getBooks: () => Array<BookTypes>;
+    updateBook: (id: string) => BookTypes;
+    deleteBook: (id: string) => Boolean;
 }
 
 class BookRepository implements BookRepository {
     async createBook(book: BookTypes) {
         const newBook = new Book(book);
-    
-        try {
-            const savedBook = await newBook.save();
-            return savedBook
-        } catch (err) {
-            return err;
-        }
+        return await newBook.save();
     }
     async getBook(id: string) {
-        try {
-            return await Book.findById(id);
-        } catch (err) {
-            return err;
-        }
+        return await Book.findById(id);
     }
     async getBooks() {
-        try {
-            return await Book.find();
-        } catch (err) {
-            return err;
-        }
+        return await Book.find();
     }
     async updateBook(id: string) {
-        try {
-            return await Book.findById(id);
-        } catch (err) {
-            return err;
-        }
+        return await Book.findById(id);
     }
     async deleteBook(id: string) {
-        try {
-            return await Book.deleteOne({ _id: id });
-        } catch (err) {
-            return err;
-        }
+        return await Book.deleteOne({ _id: id });
     }
 }
 
