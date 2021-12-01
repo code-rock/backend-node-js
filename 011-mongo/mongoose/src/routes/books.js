@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../middleware/file');
-const Book = require('../models/Book')
+const BooksRepository = require('../container');
 
 router.get('/', async (req, res) => {
-    const books = await Book.find();
+    const repo = container.get(BooksRepository);
+    const books = await repo.getBooks();
+
     res.render("library/index", {
         title: "Библиотека",
         books: books,
@@ -35,7 +37,8 @@ router.post('/create', upload.fields([
     });
 
     try {
-        await newBook.save();
+        const repo = container.get(BooksRepository);
+        await repo.createBook(newBook);
         res.redirect('/');
     } catch (e) {
         console.error(e);
@@ -45,9 +48,10 @@ router.post('/create', upload.fields([
 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    let book = {};
     try {
-        book = await Book.findById(id);
+        const repo = container.get(BooksRepository);
+        const book = await repo.getBook(id);
+
         res.render("library/view", {
             title: "Просмотр",
             book: book,
@@ -63,7 +67,8 @@ router.get('/:id', async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        await Book.deleteOne({ _id: id });
+        const repo = container.get(BooksRepository);
+        await repo.deleteBook(id);
     } catch (e) {
         console.error(e);
         res.status(404).redirect('/404');
@@ -75,9 +80,9 @@ router.get('/update/:id', async (req, res) => {
     const { id } = req.params;
     let book;
     try {
-        book = await Book.findById(id);
+        const repo = container.get(BooksRepository);
+        book = await repo.getBook(id);
     } catch (e) {
-        console.error(e);
         res.status(404).redirect('/404');
     }
 
@@ -98,18 +103,14 @@ router.post('/update/:id',  upload.fields([
     const { id } = req.params;
 
     try {
-        await Book.findByIdAndUpdate(id, {
+        const repo = container.get(BooksRepository);
+        await repo.updateBook(id, {
             ...req.body,
             fileCover,
             fileBook
-        }, {
-            new: true,
-            runValidators: true,
-            context: 'query'
         });
         res.redirect(`/${id}`);
     } catch (e) {
-        console.error(e);
         res.status(404).redirect('/404');
     }
 })
