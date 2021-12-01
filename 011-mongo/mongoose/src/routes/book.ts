@@ -1,4 +1,10 @@
+import { injectable } from "inversify";
 const Book = require('../models/Book');
+
+type Reviewer  = { 
+    username: string; 
+    text: string 
+}
 
 interface BookTypes {
     title: string;
@@ -8,33 +14,38 @@ interface BookTypes {
     fileCover: string;
     fileName: string;
     fileBook: string;
-    reviews: Array<{ username: string; text: string }>;
+    reviews: Array<Reviewer>;
 }
 
-interface BookRepositoryTypes {
+interface IBookRepository {
     createBook: (book: BookTypes) => Promise<BookTypes>;
     getBook: (id: string) => Promise<BookTypes>;
     getBooks: () => Promise<Array<BookTypes>>;
-    updateBook: (id: string) => Promise<BookTypes>;
+    updateBook: (id: string, book: BookTypes) => Promise<BookTypes>;
     deleteBook: (id: string) => Promise<Boolean>;
 }
 
-class BookRepository implements BookRepository {
-    async createBook(book: BookTypes) {
+@injectable()
+class BookRepository implements IBookRepository {
+    createBook(book: BookTypes) {
         const newBook = new Book(book);
-        return await newBook.save();
+        return newBook.save();
     }
-    async getBook(id: string) {
-        return await Book.findById(id);
+    getBook(id: string) {
+        return Book.findById(id);
     }
-    async getBooks() {
-        return await Book.find();
+    getBooks() {
+        return Book.find();
     }
-    async updateBook(id: string) {
-        return await Book.findById(id);
+    updateBook(id: string, book: BookTypes) {
+        return Book.findByIdAndUpdate(id, book, {
+            new: true,
+            runValidators: true,
+            context: 'query'
+        });
     }
-    async deleteBook(id: string) {
-        return await Book.deleteOne({ _id: id });
+    deleteBook(id: string) {
+        return Book.deleteOne({ _id: id });
     }
 }
 
