@@ -2,17 +2,22 @@
   "name": "006-mongo",
   "version": "1.0.0",
   "description": "Библиотека",
-  "main": "src/index.js",
+  "main": "dist/web/app.js",
   "scripts": {
     "build": "tsc --project ./tsconfig.json --watch",
-    "start": "node src/index.js",
-    "dev": "nodemon -r dotenv/config src/index.js",
+    "start": "node dist/web/app.js",
+    "dev": "nodemon -r dotenv/config dist/web/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "code-rock",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/morgan": "^1.9.3",
+    "@types/multer": "^1.4.7",
     "@types/node": "^16.11.10",
+    "@types/passport-local": "^1.0.34",
+    "@types/socket.io": "^3.0.2",
     "dotenv": "^10.0.0",
     "nodemon": "^2.0.13"
   },
