@@ -2,3 +2,6 @@
 .env
 config.js
 node_modules
+dist
+tsconfig.tsbuildinfo
+server.log

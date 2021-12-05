@@ -1,11 +1,12 @@
-const express = require('express');
+import express from 'express';
+import upload from '../../infrastructure/middleware/file';
+import container from '../../infrastructure/container';
+import BooksRepository from '../../books/books.service';
+
 const router = express.Router();
-const upload = require('../middleware/file');
-const BooksRepository = require('../container');
 
 router.get('/', async (req, res) => {
-    const repo = container.get(BooksRepository);
-    const books = await repo.getBooks();
+    const books = await container.get(BooksRepository).getBooks();
 
     res.render("library/index", {
         title: "Библиотека",
@@ -25,20 +26,17 @@ router.get('/create', (req, res) => {
 router.post('/create', upload.fields([
     { name: 'fileCover', maxCount: 1 },
     { name: 'fileBook', maxCount: 1 }
-  ]), async (req, res) => {
+]), async (req: any, res: any) => {
     const fileCover = req.files.fileCover ? req.files.fileCover[0].path: '';
     const fileBook = req.files.fileBook ? req.files.fileBook[0].path: '';
     
-    const newBook = new Book({
-        ...req.body,
-        fileCover,
-        fileBook,
-        reviews: [],
-    });
-
     try {
-        const repo = container.get(BooksRepository);
-        await repo.createBook(newBook);
+        await container.get(BooksRepository).createBook({
+            ...req.body,
+            fileCover,
+            fileBook,
+            reviews: [],
+        });
         res.redirect('/');
     } catch (e) {
         console.error(e);
@@ -49,8 +47,7 @@ router.post('/create', upload.fields([
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const repo = container.get(BooksRepository);
-        const book = await repo.getBook(id);
+        const book = await container.get(BooksRepository).getBook(id);
 
         res.render("library/view", {
             title: "Просмотр",
@@ -67,8 +64,7 @@ router.get('/:id', async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const repo = container.get(BooksRepository);
-        await repo.deleteBook(id);
+        await container.get(BooksRepository).deleteBook(id);
     } catch (e) {
         console.error(e);
         res.status(404).redirect('/404');
@@ -80,8 +76,7 @@ router.get('/update/:id', async (req, res) => {
     const { id } = req.params;
     let book;
     try {
-        const repo = container.get(BooksRepository);
-        book = await repo.getBook(id);
+        book = await container.get(BooksRepository).getBook(id);
     } catch (e) {
         res.status(404).redirect('/404');
     }
@@ -97,14 +92,13 @@ router.get('/update/:id', async (req, res) => {
 router.post('/update/:id',  upload.fields([
     { name: 'fileCover', maxCount: 1 },
     { name: 'fileBook', maxCount: 1 }
-  ]), async (req, res) => {
+]), async (req: any, res: any) => {
     const fileCover = req.files.fileCover ? req.files.fileCover[0].path: '';
     const fileBook = req.files.fileBook ? req.files.fileBook[0].path: '';
     const { id } = req.params;
 
     try {
-        const repo = container.get(BooksRepository);
-        await repo.updateBook(id, {
+        await container.get(BooksRepository).updateBook(id, {
             ...req.body,
             fileCover,
             fileBook
@@ -115,4 +109,4 @@ router.post('/update/:id',  upload.fields([
     }
 })
 
-module.exports = router;
+export default router;

@@ -1,10 +1,10 @@
-const multer = require('multer');
+import multer from 'multer';
 
-const extensionCovers = {
+const extensionCovers: { [key: string]: string } = {
   'image/png': 'png',
 };
 
-const extensionBooks = {
+const extensionBooks: { [key: string]: string } = {
   'text/plain': 'text',
   'application/pdf': 'pdf', 
   'application/octet-stream': 'fb2', 
@@ -18,7 +18,7 @@ const extension = {
 
 const allowedTypes = Object.keys(extension);
 
-const chosePlace = (mimetype) => {
+const chosePlace = (mimetype: string) => {
   let path = 'public/';
 
   if (extensionCovers[mimetype]) {
@@ -43,7 +43,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const fileFilter = (req, file, cb) => {
+const fileFilter = (req: any, file: any, cb: Function) => {
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true)
   } else {
@@ -51,7 +51,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-module.exports = multer({
+export default multer({
   storage,
   fileFilter
 });

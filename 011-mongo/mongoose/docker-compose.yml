@@ -28,6 +28,7 @@ services:
       - ./:/app  
     environment:
       - PORT=3000
+      - WORKING_DIR=/app
       - COOKIE_SECRET='Oki doki' 
       - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=${DB_PASSWORD:-password}

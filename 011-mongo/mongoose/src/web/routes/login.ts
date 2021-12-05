@@ -1,8 +1,10 @@
-const express = require('express');
-const passport = require('passport');
+import express from 'express';
+import passport from 'passport';
+import upload from '../../infrastructure/middleware/file';
+import container from '../../infrastructure/container';
+import UserRepository from '../../users/user.service';
+
 const router = express.Router();
-const upload = require('../middleware/file');
-const User = require('../models/User');
 
 router.get('/login', (req, res) => {
   res.render('user/login', {
@@ -17,12 +19,10 @@ router.get('/registration', (req, res) => {
 })
 
 router.post('/registration', upload.none(), async (req, res) => {
-  const newUser = new User({ ...req.body });
   try {
-    await newUser.save();
+    await container.get(UserRepository).saveUser({ ...req.body });
     res.redirect('/');
   } catch (e) {
-    console.error(e);
     res.status(404).redirect('/404');
   }
 })
@@ -39,7 +39,7 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.get('/profile', (req, res, next) => {
+router.get('/profile', (req: any, res: any, next) => {
     if (!req.isAuthenticated || !req.isAuthenticated()) {
       if (req.session) {
         req.session.returnTo = req.originalUrl || req.url
@@ -57,4 +57,4 @@ router.get('/profile', (req, res, next) => {
     })
 })
 
-module.exports = router;
+export default router;
