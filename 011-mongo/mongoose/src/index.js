@@ -7,7 +7,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const loggerMiddleware = require('./middleware/logger');
 const errorMiddleware = require('./middleware/error');
-
 const loginRouter = require('./routes/login');
 const booksView = require('./routes/books');
 const booksRouter = require('./routes/api/books');
