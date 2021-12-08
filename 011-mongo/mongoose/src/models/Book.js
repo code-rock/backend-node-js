@@ -28,6 +28,10 @@ const bookSchema = new Schema({
     fileBook: {
         type: String,
         default: '/',
+    },
+    reviews: {
+        type: Array,
+        default: [],
     }
 });
 

@@ -1,4 +1,6 @@
 const express = require("express");
+const http = require('http');
+const socketIO = require('socket.io');
 const cors = require("cors")
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -12,7 +14,7 @@ const booksRouter = require('./routes/api/books');
 const usersRouter = require('./routes/api/users');
 
 const User = require('./models/User');
-
+const Book = require('./models/Book');
 /**
  * @param {String} username
  * @param {String} password
@@ -55,6 +57,8 @@ function verify (username, password, cb) {
   })
   
 const app = express()
+const server = http.Server(app);
+const io = socketIO(server);
 
 app.set('views', __dirname + '/views');
 app.use(loggerMiddleware);
@@ -83,6 +87,32 @@ const PasswordDB = process.env.DB_PASSWORD || 'qwerty12345';
 const NameDB = process.env.DB_NAME || 'library';
 const HostDb = process.env.DB_HOST || 'mongodb://localhost:27017/';
 
+io.on('connection', (socket) => {
+  const { id } = socket;
+  console.log(`Socket connected: ${id}`);
+
+  // работа с комнатами
+  const { roomName } = socket.handshake.query;
+  socket.join(roomName);
+  socket.on('message-to-room', async (msg) => {
+      msg.type = `room: ${roomName}`;
+      socket.to(roomName).emit('message-to-room', msg);
+      socket.emit('message-to-room', msg);
+      Book.findOneAndUpdate(
+        { _id: roomName },
+        { $push: { 'reviews': msg } },
+        { upsert: true },
+        (err, data) => {
+          if (err) console.log(err);
+        }
+      );
+  });
+
+  socket.on('disconnect', () => {
+      console.log(`Socket disconnected: ${id}`);
+  });
+});
+
 async function start() {
     try {
         await mongoose.connect(HostDb, {
@@ -93,7 +123,7 @@ async function start() {
             useUnifiedTopology: true
         });
 
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         })
     } catch (e) {

@@ -31,6 +31,7 @@ router.post('/create', upload.fields([
         ...req.body,
         fileCover,
         fileBook,
+        reviews: [],
     });
 
     try {
